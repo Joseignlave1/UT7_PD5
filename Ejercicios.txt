@@ -1,0 +1,202 @@
+EJERCICIO 1)
+
+UT7_PD5 
+
+1)
+
+Determinar si el grafo tiene ciclos:
+
+• Se realiza búsqueda en profundidad y si se
+encuentra un arco de retroceso, el grafo
+tiene un ciclo.
+
+Realizo una búsqueda en profundidad y si se encuentra un arco de retroceso, el grafo tiene un ciclo
+
+
+PSEUDOCÓDIGO:
+
+Tvertice.bpf()
+
+COM
+
+devolver visitar(this)
+
+FIN
+
+
+función visitar(vertice)
+
+COM
+
+vertice.visitado = true
+
+Para cada adyacente de vertice hacer 
+  si(adyacente.visitado) entonces
+    devolver true
+
+  sino
+    si(visitar(adyacente) = true) 
+      devolver true 
+    fin si
+
+  fin si
+
+fin para
+vertice.visitado = false  
+
+devolver false  
+
+FIN
+ 
+
+TIEMPO DE EJECUCIÓN O(V + E) donde V es el número de vértices y E el número de aristas.
+
+
+EJERCICIO 2)
+
+Precondiciones:
+
+El grafo debe ser dirigido y acíclico
+
+Postcondiciones:
+
+Se obtiene una lista de vértices del grafo en orden topológico 
+
+
+PSEUDOCÓDIGO:
+
+COM
+
+función ordenarTopologico(Grafo G)
+
+ pila = crearPila()
+ Conjunto visitado = crearConjuntoVacio()
+
+ para cada vértice v en G hacer
+  si v no está en visitado entonces
+     bpf(v, visitado, pila)
+
+  fin si
+
+fin para
+
+resultado = crearLista()
+
+mientras pila no esté vacio hacer
+  resultado.agregar(stack.pop())
+fin mientras
+
+devolver resultado
+
+FIN
+
+
+función bpf(vertice v, conjunto visitado, Pila pila)
+
+COM
+visitado.agregar(v)
+
+para cada adyacente de w en v.adyacentes hacer
+   si w no está en visitado entonces
+     bpf(v,visitado,pila)
+   fin si
+    pila.push(v)
+FIN
+
+ORDEN DE TIEMPO DE EJECUCIÓN O(V + E) V = cantidad de vértices, E = cantidad de aristas.
+
+
+EJERCICIO 3:
+
+Fuertemente Conexo
+
+
+función esFuertementeConexo(grafo):
+    si grafo.estaVacio() entonces
+        retornar Verdadero
+
+    inicial = grafo.obtenerVerticeInicial()
+
+    verticesVisitados = grafo.realizarBEA(inicial)
+    si verticesVisitados.tamano() < grafo.numeroDeVertices() entonces
+        retornar Falso
+
+    grafoTranspuesto = crearGrafoTranspuesto(grafo)
+
+    grafoTranspuesto.desvisitarVertices()
+
+    inicialTranspuesto = grafoTranspuesto.obtenerVertice(inicial.obtenerEtiqueta())
+    verticesVisitadosTranspuesto = grafoTranspuesto.realizarBEA(inicialTranspuesto)
+
+    si verticesVisitadosTranspuesto.tamano() < grafo.numeroDeVertices() entonces
+        retornar Falso
+
+    retornar Verdadero
+
+
+función crearGrafoTranspuesto(grafo):
+    grafoTranspuesto = nuevo GrafoDirigido()
+
+    para cada vertice en grafo.obtenerVertices():
+        grafoTranspuesto.insertarVertice(vertice.obtenerEtiqueta())
+
+    para cada vertice en grafo.obtenerVertices():
+        para cada adyacencia en vertice.obtenerAdyacencias():
+            grafoTranspuesto.insertarArista(adyacencia.obtenerDestino().obtenerEtiqueta(), vertice.obtenerEtiqueta(), adyacencia.obtenerCosto())
+
+    retornar grafoTranspuesto
+
+
+
+
+Componentes fuertemente conexos:
+
+PSEUDOCÓDIGO para hallar los componentes fuertemente conexos utilizando el algoritmo de tarjan:
+
+
+función hallarComponentesFuertementeConectados(grafo):
+    index = 0
+    pila = nueva Pila()
+    indices = mapa vacío
+    bajos = mapa vacío
+    enPila = conjunto vacío
+    componentes = lista vacía
+
+    para cada vertice en grafo.obtenerVertices() hacer
+        si vertice no está en indices entonces
+            fuertementeConexos(vertice, index, pila, indices, bajos, enPila, componentes)
+
+    retornar componentes
+
+función fuertementeConexos(vértice, index, pila, indices, bajos, enPila, componentes):
+    indices[vértice] = index
+    bajos[vértice] = index
+    index = index + 1
+    pila.push(vértice)
+    enPila.agregar(vértice)
+
+    para cada vecino en vértice.obtenerVecinos() hacer
+        si vecino no está en indices entonces
+            fuertementeConexos(vecino, index, pila, indices, bajos, enPila, componentes)
+            bajos[vértice] = min(bajos[vértice], bajos[vecino])
+        sino si vecino está en enPila entonces
+            bajos[vértice] = min(bajos[vértice], indices[vecino])
+
+    si bajos[vértice] = indices[vértice] entonces
+        componente = lista vacía
+        repetir
+            w = pila.pop()
+            enPila.remover(w)
+            componente.agregar(w)
+        hasta que w vértice
+        componentes.agregar(componente)
+
+
+ORDEN DE TIEMPO DE EJECUCIÓN: O(V + E) V = cantidad de vértices, E = cantidad de aristas.
+
+
+
+
+
+
+
